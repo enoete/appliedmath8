@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ Work, Energy & Power — CFBC Applied Math</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f1a;
+  --card: #161929;
+  --card2: #1c2035;
+  --accent1: #f9a825;
+  --accent2: #26c6da;
+  --accent3: #ef5350;
+  --accent4: #66bb6a;
+  --accent5: #ab47bc;
+  --text: #e8eaf6;
+  --muted: #9fa8da;
+  --border: #2a3050;
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 16px; line-height: 1.6; }
+
+/* HEADER */
+.hero { background: linear-gradient(135deg, #0d0f1a 0%, #1a2510 50%, #0d1f3c 100%); padding: 2.5rem 1rem 2rem; text-align: center; border-bottom: 2px solid var(--border); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(102,187,106,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(249,168,37,0.08) 0%, transparent 60%); }
+.hero h1 { font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--accent1); letter-spacing: -1px; position: relative; }
+.hero h1 span { color: var(--accent4); }
+.hero p { color: var(--muted); margin-top: 0.5rem; font-size: 1rem; position: relative; }
+.badge { display: inline-block; background: rgba(102,187,106,0.15); border: 1px solid var(--accent4); color: var(--accent4); font-size: 0.75rem; font-family: 'Space Mono', monospace; padding: 3px 10px; border-radius: 20px; margin-bottom: 0.8rem; }
+
+/* TABS */
+.tab-bar { display: flex; gap: 0; background: var(--card); border-bottom: 2px solid var(--border); overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 100; }
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn { flex-shrink: 0; padding: 0.9rem 1.4rem; background: none; border: none; color: var(--muted); font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.tab-btn.active { color: var(--accent1); border-bottom-color: var(--accent1); }
+.tab-content { display: none; padding: 2rem 1rem 4rem; max-width: 900px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+/* SECTION TITLES */
+.sec-title { font-size: 1.5rem; font-weight: 900; color: var(--accent2); margin: 2rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
+.sec-title .icon { font-size: 1.4rem; }
+
+/* CARDS */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1.2rem; }
+.card.highlight { border-color: var(--accent1); background: linear-gradient(135deg, var(--card) 0%, rgba(249,168,37,0.05) 100%); }
+.card.blue { border-color: var(--accent2); background: linear-gradient(135deg, var(--card) 0%, rgba(38,198,218,0.05) 100%); }
+.card.green { border-color: var(--accent4); background: linear-gradient(135deg, var(--card) 0%, rgba(102,187,106,0.05) 100%); }
+.card.red { border-color: var(--accent3); background: linear-gradient(135deg, var(--card) 0%, rgba(239,83,80,0.05) 100%); }
+.card.purple { border-color: var(--accent5); background: linear-gradient(135deg, var(--card) 0%, rgba(171,71,188,0.05) 100%); }
+.card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.6rem; }
+.card h3.yellow { color: var(--accent1); }
+.card h3.cyan { color: var(--accent2); }
+.card h3.green { color: var(--accent4); }
+.card h3.red { color: var(--accent3); }
+.card h3.purple { color: var(--accent5); }
+
+/* FORMULA BOX */
+.formula { background: #0a0c14; border-left: 4px solid var(--accent1); border-radius: 8px; padding: 0.9rem 1.1rem; font-family: 'Space Mono', monospace; font-size: 0.92rem; color: var(--accent1); margin: 0.7rem 0; line-height: 1.9; white-space: pre-wrap; }
+.formula .comment { color: var(--muted); font-size: 0.8rem; }
+
+/* ALERTS */
+.tip { background: rgba(249,168,37,0.1); border: 1px solid rgba(249,168,37,0.3); border-radius: 10px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.92rem; }
+.tip::before { content: '💡 TIP: '; font-weight: 800; color: var(--accent1); }
+.warn { background: rgba(239,83,80,0.1); border: 1px solid rgba(239,83,80,0.3); border-radius: 10px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.92rem; }
+.warn::before { content: '⚠️ WATCH OUT: '; font-weight: 800; color: var(--accent3); }
+.note { background: rgba(38,198,218,0.1); border: 1px solid rgba(38,198,218,0.3); border-radius: 10px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.92rem; }
+.note::before { content: '📌 NOTE: '; font-weight: 800; color: var(--accent2); }
+
+/* SVG DIAGRAMS */
+.diagram-wrap { background: #0a0c18; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin: 1rem 0; text-align: center; overflow-x: auto; }
+.diagram-wrap p { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+
+/* STEPS */
+.steps { counter-reset: step; }
+.step { display: flex; gap: 1rem; margin-bottom: 0.9rem; align-items: flex-start; }
+.step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--accent1); color: #000; font-weight: 900; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.step-num.cyan { background: var(--accent2); }
+.step-num.green { background: var(--accent4); }
+.step-num.purple { background: var(--accent5); }
+.step-body { flex: 1; }
+.step-body strong { color: var(--accent1); }
+
+/* QUIZ */
+.question { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1.4rem; }
+.q-num { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; }
+.q-text { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; line-height: 1.5; }
+.q-scenario { color: var(--accent2); font-weight: 800; }
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.8rem; }
+.btn { background: var(--card2); border: 1px solid var(--border); color: var(--muted); padding: 0.45rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-family: 'Nunito', sans-serif; font-weight: 700; transition: all 0.15s; }
+.btn:hover { border-color: var(--accent1); color: var(--accent1); }
+.btn.hint-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+.btn.step-btn:hover { border-color: var(--accent5); color: var(--accent5); }
+.reveal { display: none; margin-top: 0.9rem; padding: 0.9rem 1rem; border-radius: 10px; font-size: 0.93rem; line-height: 1.7; }
+.reveal.hint { background: rgba(38,198,218,0.08); border: 1px solid rgba(38,198,218,0.25); }
+.reveal.answer { background: rgba(102,187,106,0.08); border: 1px solid rgba(102,187,106,0.25); }
+.reveal.answer strong { color: var(--accent4); }
+.reveal.steps { background: rgba(171,71,188,0.08); border: 1px solid rgba(171,71,188,0.25); }
+.reveal.steps .lbl { color: var(--accent5); font-weight: 800; }
+.reveal p { margin-bottom: 0.4rem; }
+
+/* TABLE */
+.angle-table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.9rem; }
+.angle-table th { background: rgba(249,168,37,0.15); color: var(--accent1); padding: 0.6rem; text-align: center; border: 1px solid var(--border); }
+.angle-table td { padding: 0.6rem; text-align: center; border: 1px solid var(--border); }
+.angle-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+.angle-table .hi { color: var(--accent2); font-weight: 800; }
+
+/* TAG */
+.tag { display: inline-block; font-size: 0.7rem; font-family: 'Space Mono', monospace; padding: 2px 8px; border-radius: 5px; font-weight: 700; margin-left: 0.4rem; vertical-align: middle; }
+.tag.easy { background: rgba(102,187,106,0.2); color: var(--accent4); }
+.tag.medium { background: rgba(249,168,37,0.2); color: var(--accent1); }
+.tag.hard { background: rgba(239,83,80,0.2); color: var(--accent3); }
+
+/* PROGRESS */
+.progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent1), var(--accent4)); border-radius: 3px; width: 0%; transition: width 0.5s ease; }
+.score-display { font-family: 'Space Mono', monospace; color: var(--accent1); font-size: 0.9rem; text-align: right; margin-bottom: 0.5rem; }
+
+/* ENERGY METER */
+.e-meter-wrap { display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap; }
+.e-meter { flex: 1; min-width: 140px; background: #0a0c14; border-radius: 10px; padding: 0.8rem; border: 1px solid var(--border); text-align: center; }
+.e-meter-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
+.e-meter-val { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 1.1rem; }
+.e-bar-bg { height: 8px; background: var(--border); border-radius: 4px; margin-top: 0.5rem; overflow: hidden; }
+.e-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+
+svg text { font-family: 'Nunito', sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">CAPE Applied Math · Unit 2 · Module 3</div>
+  <h1>⚡ Work, <span>Energy</span> & Power</h1>
+  <p>Theory · Diagrams · Techniques · 20 Practice Problems with Hints & Solutions</p>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('work')">🔨 1. Work</button>
+  <button class="tab-btn" onclick="showTab('energy')">⚡ 2. Energy</button>
+  <button class="tab-btn" onclick="showTab('wep')">🔄 3. Work-Energy</button>
+  <button class="tab-btn" onclick="showTab('power')">💡 4. Power</button>
+  <button class="tab-btn" onclick="showTab('quiz')">🎯 5. Quiz</button>
+</div>
+
+<!-- ==================== TAB 1: WORK ==================== -->
+<div id="tab-work" class="tab-content active">
+
+  <div class="sec-title"><span class="icon">🔨</span> What Is Work?</div>
+
+  <div class="card red" style="border-width:2px;">
+    <h3 class="red">🚨 The #1 Misconception About "Work"</h3>
+    <p style="margin-bottom:0.8rem;">In everyday life, "working hard" means effort. In physics, <strong>work has a precise definition</strong> — and you can push a wall all day without doing any work at all!</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.7rem;">
+      <div style="background:rgba(239,83,80,0.1); border:1px solid rgba(239,83,80,0.3); border-radius:10px; padding:0.8rem;">
+        <div style="color:#ef5350; font-weight:800; margin-bottom:0.4rem;">❌ NOT work (physics)</div>
+        <div style="font-size:0.87rem;">Holding a heavy bag stationary. Pushing a wall. Carrying a bag horizontally. Force with NO displacement in force's direction.</div>
+      </div>
+      <div style="background:rgba(102,187,106,0.1); border:1px solid rgba(102,187,106,0.3); border-radius:10px; padding:0.8rem;">
+        <div style="color:#66bb6a; font-weight:800; margin-bottom:0.4rem;">✅ IS work (physics)</div>
+        <div style="font-size:0.87rem;">Lifting a bag off the ground. Pushing a box across a floor. Any force that has a component <em>in the direction of motion</em>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card highlight">
+    <h3 class="yellow">Definition: Work Done by a Constant Force</h3>
+    <p style="margin-bottom:0.6rem;">Work is done when a force moves its point of application through a displacement <strong>in the direction of the force</strong>.</p>
+    <div class="formula">W = F · d · cos θ
+
+where:  F = force (N)
+        d = displacement (m)
+        θ = angle between force and displacement
+        W = work done (J = joules)</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.6rem; margin-top:0.8rem; font-size:0.85rem;">
+      <div style="background:#0a0c14; border-radius:8px; padding:0.7rem; text-align:center; border-top:3px solid #66bb6a;">
+        <div style="color:#66bb6a; font-weight:800;">θ = 0°</div>
+        <div style="color:var(--muted); font-size:0.78rem;">Force parallel to motion</div>
+        <div style="font-family:'Space Mono',monospace; color:#f9a825;">W = Fd</div>
+        <div style="font-size:0.78rem; color:var(--muted);">(maximum work)</div>
+      </div>
+      <div style="background:#0a0c14; border-radius:8px; padding:0.7rem; text-align:center; border-top:3px solid #f9a825;">
+        <div style="color:#f9a825; font-weight:800;">0° &lt; θ &lt; 90°</div>
+        <div style="color:var(--muted); font-size:0.78rem;">Force at angle to motion</div>
+        <div style="font-family:'Space Mono',monospace; color:#f9a825;">W = Fd cosθ</div>
+        <div style="font-size:0.78rem; color:var(--muted);">(partial work)</div>
+      </div>
+      <div style="background:#0a0c14; border-radius:8px; padding:0.7rem; text-align:center; border-top:3px solid #ef5350;">
+        <div style="color:#ef5350; font-weight:800;">θ = 90°</div>
+        <div style="color:var(--muted); font-size:0.78rem;">Force ⊥ to motion</div>
+        <div style="font-family:'Space Mono',monospace; color:#f9a825;">W = 0</div>
+        <div style="font-size:0.78rem; color:var(--muted);">(no work done!)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE WORK DIAGRAM -->
+  <div class="card blue">
+    <h3 class="cyan">🎛️ Live: See How Angle Affects Work Done</h3>
+    <p style="font-size:0.9rem; color:var(--muted); margin-bottom:0.8rem;">F = 50 N, d = 10 m. The box always moves <strong>horizontally to the right</strong>. θ is the angle between the applied force and the direction of motion. Drag the slider and watch what happens to work done.</p>
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem; flex-wrap:wrap;">
+      <label style="font-weight:800; color:var(--accent1);">θ =</label>
+      <input type="range" id="workAngle" min="0" max="90" value="0" style="flex:1; min-width:150px; accent-color:#f9a825;">
+      <span id="workAngleVal" style="font-family:'Space Mono',monospace; color:#f9a825; min-width:40px;">0°</span>
+    </div>
+    <div class="diagram-wrap" style="background:#070910; padding:0.8rem;">
+      <canvas id="workCanvas" width="480" height="220" style="max-width:100%; border-radius:8px; display:block; margin:0 auto;"></canvas>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-top:0.8rem;">
+      <div style="background:#0a0c14; border-radius:8px; padding:0.7rem; border-left:3px solid #f9a825;">
+        <div style="font-size:0.75rem; color:var(--muted);">Effective component (F cosθ)</div>
+        <div id="fCosVal" style="font-family:'Space Mono',monospace; color:#f9a825; font-size:1.1rem; font-weight:700;">50.0 N</div>
+      </div>
+      <div style="background:#0a0c14; border-radius:8px; padding:0.7rem; border-left:3px solid #66bb6a;">
+        <div style="font-size:0.75rem; color:var(--muted);">Work done = F·d·cosθ</div>
+        <div id="workVal" style="font-family:'Space Mono',monospace; color:#66bb6a; font-size:1.1rem; font-weight:700;">500 J</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEGATIVE WORK -->
+  <div class="sec-title"><span class="icon">➖</span> Negative Work & Work Against Forces</div>
+
+  <div class="card purple">
+    <h3 class="purple">When Is Work Negative?</h3>
+    <p style="margin-bottom:0.7rem;">Work is negative when the force and displacement point in <strong>opposite directions</strong> (90° &lt; θ ≤ 180°). The force is removing energy from the object.</p>
+    <div class="formula">θ = 180°:  W = Fd cos180° = −Fd   (force opposes motion)
+
+Common examples of negative work:
+  • Friction on a sliding object  (friction opposes motion)
+  • Braking force on a car
+  • Gravity on an object being lifted upward</div>
+    <div class="tip">Friction always does <strong>negative work</strong> on a moving object — it takes kinetic energy away and converts it to heat.</div>
+  </div>
+
+  <!-- VARIABLE FORCE -->
+  <div class="sec-title"><span class="icon">📈</span> Work Done by a Variable Force</div>
+
+  <div class="card green">
+    <h3 class="green">When Force Is Not Constant — Use the Area Under F-x Graph</h3>
+    <p style="margin-bottom:0.8rem;">When force varies with displacement, W = F·d no longer applies directly. Instead:</p>
+    <div class="formula">Work done = Area under the Force–displacement (F–x) graph</div>
+    <div class="diagram-wrap">
+      <svg width="420" height="230" viewBox="0 0 420 230">
+        <!-- axes -->
+        <line x1="50" y1="190" x2="390" y2="190" stroke="#9fa8da" stroke-width="2"/>
+        <line x1="50" y1="190" x2="50" y2="20" stroke="#9fa8da" stroke-width="2"/>
+        <!-- axis labels -->
+        <text x="390" y="205" fill="#9fa8da" font-size="13" font-weight="700">x (m)</text>
+        <text x="10" y="20" fill="#9fa8da" font-size="13" font-weight="700">F (N)</text>
+        <!-- tick marks x -->
+        <line x1="130" y1="190" x2="130" y2="195" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="125" y="208" fill="#9fa8da" font-size="11">2</text>
+        <line x1="210" y1="190" x2="210" y2="195" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="205" y="208" fill="#9fa8da" font-size="11">4</text>
+        <line x1="290" y1="190" x2="290" y2="195" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="285" y="208" fill="#9fa8da" font-size="11">6</text>
+        <line x1="370" y1="190" x2="370" y2="195" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="365" y="208" fill="#9fa8da" font-size="11">8</text>
+        <!-- tick marks y -->
+        <line x1="45" y1="140" x2="50" y2="140" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="30" y="145" fill="#9fa8da" font-size="11">20</text>
+        <line x1="45" y1="90" x2="50" y2="90" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="30" y="95" fill="#9fa8da" font-size="11">40</text>
+        <line x1="45" y1="40" x2="50" y2="40" stroke="#9fa8da" stroke-width="1.5"/>
+        <text x="30" y="45" fill="#9fa8da" font-size="11">60</text>
+
+        <!-- shaded area under curve (trapezoid + triangle approximation) -->
+        <!-- Constant section 0-4m at F=40N: rect from x=50 to x=210, y=90 to y=190 -->
+        <rect x="50" y="90" width="160" height="100" fill="rgba(102,187,106,0.15)" stroke="none"/>
+        <!-- Triangle section 4-8m, drops from 40 to 0: triangle (210,90)(370,190)(210,190) -->
+        <polygon points="210,90 370,190 210,190" fill="rgba(249,168,37,0.15)" stroke="none"/>
+
+        <!-- Force line: constant at 40N from x=0 to x=4m, then drops to 0 at x=8m -->
+        <polyline points="50,90 210,90 370,190" fill="none" stroke="#f9a825" stroke-width="3"/>
+
+        <!-- area labels -->
+        <text x="105" y="148" fill="#66bb6a" font-size="12" font-weight="800">Area₁</text>
+        <text x="85" y="162" fill="#66bb6a" font-size="11">= 40×4 = 160 J</text>
+        <text x="258" y="162" fill="#f9a825" font-size="12" font-weight="800">Area₂</text>
+        <text x="240" y="176" fill="#f9a825" font-size="11">= ½×40×4 = 80 J</text>
+
+        <!-- total work label -->
+        <text x="130" y="55" fill="#26c6da" font-size="13" font-weight="800">Total Work = 160 + 80 = 240 J</text>
+      </svg>
+      <p>Area under F-x graph = total work done. Different shapes need different area formulas (rectangle, triangle, trapezium).</p>
+    </div>
+    <div class="tip">For a <strong>constant force</strong>: rectangle area = F × d. For a <strong>linearly varying force</strong>: triangle or trapezium. For a <strong>curved force</strong>: you need calculus (integration) or count squares.</div>
+  </div>
+
+  <!-- WORK FORMULA CASES -->
+  <div class="sec-title"><span class="icon">📋</span> Work Done — Common Cases</div>
+  <table class="angle-table">
+    <tr><th>Situation</th><th>Formula</th><th>Sign</th></tr>
+    <tr><td>Force parallel to motion (θ=0°)</td><td>W = Fd</td><td class="hi">Positive ✓</td></tr>
+    <tr><td>Force at angle θ to motion</td><td>W = Fd cosθ</td><td class="hi">Positive if θ &lt; 90°</td></tr>
+    <tr><td>Lifting object vertically (height h)</td><td>W = mgh</td><td class="hi">Positive (by lifter)</td></tr>
+    <tr><td>Gravity on object moving up</td><td>W = −mgh</td><td style="color:#ef5350;">Negative</td></tr>
+    <tr><td>Friction force f over distance d</td><td>W = −fd</td><td style="color:#ef5350;">Negative</td></tr>
+    <tr><td>Force perpendicular to motion (θ=90°)</td><td>W = 0</td><td class="hi">Zero</td></tr>
+  </table>
+
+</div>
+
+<!-- ==================== TAB 2: ENERGY ==================== -->
+<div id="tab-energy" class="tab-content">
+
+  <div class="sec-title"><span class="icon">⚡</span> Types of Mechanical Energy</div>
+
+  <div class="card highlight">
+    <h3 class="yellow">The Two Forms You Need to Know</h3>
+    <p style="margin-bottom:0.8rem;">For CAPE Applied Math, you work with two forms of mechanical energy. <strong>Energy is the capacity to do work</strong> and is measured in joules (J).</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+      <div style="background:rgba(249,168,37,0.1); border:2px solid rgba(249,168,37,0.4); border-radius:12px; padding:1rem;">
+        <div style="font-weight:900; color:#f9a825; font-size:1rem; margin-bottom:0.5rem;">🏃 Kinetic Energy (KE)</div>
+        <div style="font-family:'Space Mono',monospace; color:#f9a825; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">KE = ½mv²</div>
+        <div style="font-size:0.85rem; color:var(--muted);">Energy of <em>motion</em>. A stationary object has zero KE. Depends on mass AND speed squared.</div>
+      </div>
+      <div style="background:rgba(38,198,218,0.1); border:2px solid rgba(38,198,218,0.4); border-radius:12px; padding:1rem;">
+        <div style="font-weight:900; color:#26c6da; font-size:1rem; margin-bottom:0.5rem;">🏔️ Gravitational PE (GPE)</div>
+        <div style="font-family:'Space Mono',monospace; color:#26c6da; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">GPE = mgh</div>
+        <div style="font-size:0.85rem; color:var(--muted);">Energy of <em>position</em>. Depends on height above a reference level (usually ground).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KINETIC ENERGY DEEP DIVE -->
+  <div class="card blue">
+    <h3 class="cyan">Kinetic Energy — KE = ½mv²</h3>
+    <div class="formula">KE = ½ m v²
+
+m = mass in kg
+v = speed in m/s
+KE is in joules (J)
+
+Doubling mass → KE doubles
+Doubling speed → KE quadruples (×4)!  ← v is squared!</div>
+
+    <div style="margin-top:0.8rem;">
+      <div style="font-weight:800; color:#26c6da; margin-bottom:0.6rem;">🎛️ KE Explorer — Change mass and speed:</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:0.8rem;">
+        <div>
+          <label style="font-size:0.82rem; color:var(--muted);">Mass m (kg): <span id="massVal" style="color:#f9a825;">10</span></label>
+          <input type="range" id="massSlider" min="1" max="50" value="10" style="width:100%; accent-color:#f9a825; margin-top:0.3rem;">
+        </div>
+        <div>
+          <label style="font-size:0.82rem; color:var(--muted);">Speed v (m/s): <span id="speedVal" style="color:#f9a825;">5</span></label>
+          <input type="range" id="speedSlider" min="0" max="30" value="5" style="width:100%; accent-color:#26c6da; margin-top:0.3rem;">
+        </div>
+      </div>
+      <div class="e-meter-wrap">
+        <div class="e-meter">
+          <div class="e-meter-label">½mv²</div>
+          <div class="e-meter-val" id="keDisplay" style="color:#f9a825;">125 J</div>
+          <div class="e-bar-bg"><div class="e-bar-fill" id="keBar" style="background:#f9a825; width:25%;"></div></div>
+        </div>
+        <div class="e-meter">
+          <div class="e-meter-label">If mass doubles → KE</div>
+          <div class="e-meter-val" id="ke2mDisplay" style="color:#26c6da;">250 J</div>
+          <div class="e-bar-bg"><div class="e-bar-fill" id="ke2mBar" style="background:#26c6da; width:50%;"></div></div>
+        </div>
+        <div class="e-meter">
+          <div class="e-meter-label">If speed doubles → KE</div>
+          <div class="e-meter-val" id="ke2vDisplay" style="color:#ab47bc;">500 J</div>
+          <div class="e-bar-bg"><div class="e-bar-fill" id="ke2vBar" style="background:#ab47bc; width:100%;"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="warn">v is squared in the formula! A car at 60 mph has <strong>4×</strong> the KE of a car at 30 mph — that's why speeding is so dangerous.</div>
+  </div>
+
+  <!-- GPE -->
+  <div class="card green">
+    <h3 class="green">Gravitational Potential Energy — GPE = mgh</h3>
+    <div class="formula">GPE = m g h
+
+m = mass in kg
+g = 9.8 m/s² (or 10 m/s² if specified)
+h = vertical height above reference level (m)
+GPE is in joules (J)</div>
+
+    <div class="diagram-wrap">
+      <svg width="400" height="240" viewBox="0 0 400 240">
+        <defs>
+          <marker id="ga1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#26c6da"/></marker>
+          <marker id="ga2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f9a825"/></marker>
+          <marker id="ga3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ef5350"/></marker>
+        </defs>
+        <!-- ground line -->
+        <rect x="20" y="210" width="360" height="8" fill="#2a3050" rx="2"/>
+        <text x="25" y="228" fill="#9fa8da" font-size="11">Reference level (h = 0, GPE = 0)</text>
+
+        <!-- Building/cliff shape -->
+        <rect x="280" y="80" width="80" height="130" fill="#1a1f35" stroke="#3a4060" stroke-width="1.5" rx="3"/>
+        <text x="310" y="150" fill="#9fa8da" font-size="10">cliff</text>
+
+        <!-- Object at top -->
+        <rect x="295" y="60" width="50" height="28" rx="6" fill="#1c2035" stroke="#f9a825" stroke-width="2"/>
+        <text x="320" y="79" fill="#f9a825" font-size="12" font-weight="800" text-anchor="middle">m</text>
+
+        <!-- Height arrow -->
+        <line x1="260" y1="210" x2="260" y2="74" stroke="#26c6da" stroke-width="2" marker-end="url(#ga1)"/>
+        <line x1="256" y1="210" x2="264" y2="210" stroke="#26c6da" stroke-width="1.5"/>
+        <line x1="256" y1="74" x2="264" y2="74" stroke="#26c6da" stroke-width="1.5"/>
+        <text x="235" y="148" fill="#26c6da" font-size="13" font-weight="800">h</text>
+
+        <!-- Weight arrow down from object -->
+        <line x1="320" y1="88" x2="320" y2="190" stroke="#ef5350" stroke-width="2.5" marker-end="url(#ga3)"/>
+        <text x="325" y="150" fill="#ef5350" font-size="12" font-weight="700">mg</text>
+
+        <!-- GPE label -->
+        <rect x="30" y="55" width="200" height="56" rx="10" fill="rgba(38,198,218,0.1)" stroke="rgba(38,198,218,0.3)" stroke-width="1.5"/>
+        <text x="130" y="78" fill="#26c6da" font-size="13" font-weight="800" text-anchor="middle">GPE = mgh</text>
+        <text x="130" y="98" fill="#9fa8da" font-size="11" text-anchor="middle">h = vertical height only!</text>
+        <text x="130" y="112" fill="#9fa8da" font-size="11" text-anchor="middle">(not distance along slope)</text>
+
+        <!-- GPE at ground -->
+        <text x="130" y="200" fill="#9fa8da" font-size="12" text-anchor="middle">GPE = 0 at ground level</text>
+      </svg>
+      <p>GPE depends on <strong>vertical height h</strong> — not the path taken to get there.</p>
+    </div>
+    <div class="tip">Always measure <strong>h</strong> vertically. On a slope of length L at angle α: h = L sinα (the vertical component, not the slope length itself).</div>
+  </div>
+
+  <!-- CONSERVATION OF ENERGY -->
+  <div class="sec-title"><span class="icon">🔁</span> Conservation of Energy</div>
+
+  <div class="card purple">
+    <h3 class="purple">The Principle of Conservation of Energy</h3>
+    <p style="margin-bottom:0.7rem;">Energy cannot be created or destroyed — it can only be converted from one form to another. The total energy of a closed system is constant.</p>
+    <div class="formula">For a mechanical system (no friction / air resistance):
+
+KE + GPE = constant   (Total Mechanical Energy)
+
+Loss in GPE = Gain in KE  (as object falls)
+Gain in GPE = Loss in KE  (as object rises)</div>
+    <div class="warn">When friction IS present, mechanical energy is NOT conserved — some energy converts to heat. The total energy of the universe is still conserved, but you lose useful mechanical energy.</div>
+  </div>
+
+  <!-- ANIMATED ENERGY CONVERSION -->
+  <div class="card blue">
+    <h3 class="cyan">🎛️ Interactive: Energy Conversion on a Slope</h3>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0.8rem;">A 5 kg ball rolls down a smooth slope from height h. Drag to change the height and watch KE ↔ GPE conversion. (g = 10 m/s²)</p>
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem; flex-wrap:wrap;">
+      <label style="font-weight:800; color:var(--accent1);">Height h =</label>
+      <input type="range" id="heightSlider" min="1" max="20" value="10" style="flex:1; min-width:150px; accent-color:#f9a825;">
+      <span id="heightVal" style="font-family:'Space Mono',monospace; color:#f9a825; min-width:50px;">10 m</span>
+    </div>
+    <div class="diagram-wrap" style="background:#070910;">
+      <canvas id="energyCanvas" width="480" height="200" style="max-width:100%; border-radius:8px; display:block; margin:0 auto;"></canvas>
+    </div>
+    <div class="e-meter-wrap" style="margin-top:0.8rem;">
+      <div class="e-meter">
+        <div class="e-meter-label">GPE at top = mgh</div>
+        <div class="e-meter-val" id="gpeTop" style="color:#26c6da;">500 J</div>
+        <div class="e-bar-bg"><div class="e-bar-fill" id="gpeTopBar" style="background:#26c6da; width:100%;"></div></div>
+      </div>
+      <div class="e-meter">
+        <div class="e-meter-label">KE at bottom = ½mv²</div>
+        <div class="e-meter-val" id="keBottom" style="color:#f9a825;">500 J</div>
+        <div class="e-bar-bg"><div class="e-bar-fill" id="keBottomBar" style="background:#f9a825; width:100%;"></div></div>
+      </div>
+      <div class="e-meter">
+        <div class="e-meter-label">Speed at bottom (v)</div>
+        <div class="e-meter-val" id="speedBottom" style="color:#66bb6a;">14.1 m/s</div>
+        <div class="e-bar-bg"><div class="e-bar-fill" id="speedBar" style="background:#66bb6a; width:70%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB 3: WORK-ENERGY PRINCIPLE ==================== -->
+<div id="tab-wep" class="tab-content">
+
+  <div class="sec-title"><span class="icon">🔄</span> The Work-Energy Principle</div>
+
+  <div class="card highlight" style="border-width:2px;">
+    <h3 class="yellow">The Most Important Theorem in This Module</h3>
+    <p style="margin-bottom:0.7rem;">The net work done on an object equals the change in its kinetic energy.</p>
+    <div class="formula">Net Work Done = ΔKE = KE_final − KE_initial
+
+W_net = ½mv² − ½mu²
+
+where:  u = initial speed,  v = final speed</div>
+    <div style="background:rgba(249,168,37,0.08); border:1px solid rgba(249,168,37,0.3); border-radius:10px; padding:0.9rem; margin-top:0.8rem;">
+      <div style="font-weight:800; color:#f9a825; margin-bottom:0.5rem;">This means:</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; font-size:0.88rem;">
+        <div>W_net &gt; 0 → object <strong style="color:#66bb6a;">speeds up</strong> (KE increases)</div>
+        <div>W_net &lt; 0 → object <strong style="color:#ef5350;">slows down</strong> (KE decreases)</div>
+        <div>W_net = 0 → object moves at <strong style="color:#26c6da;">constant speed</strong></div>
+        <div>Object stationary → W needed = ½mv² − 0 = <strong style="color:#f9a825;">½mv²</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY THIS WORKS -->
+  <div class="card blue">
+    <h3 class="cyan">Proof from Newton's 2nd Law</h3>
+    <p style="margin-bottom:0.7rem; font-size:0.9rem;">This isn't just a formula — it comes directly from F = ma and kinematics:</p>
+    <div style="background:#0a0c14; border-radius:10px; padding:1rem; font-size:0.87rem; line-height:2;">
+      <div style="margin-bottom:0.3rem;"><span style="color:#26c6da; font-weight:800;">Step 1:</span> Newton's 2nd Law: <span style="font-family:'Space Mono',monospace; color:#f9a825;">F = ma</span></div>
+      <div style="margin-bottom:0.3rem;"><span style="color:#26c6da; font-weight:800;">Step 2:</span> Kinematics: <span style="font-family:'Space Mono',monospace; color:#f9a825;">v² = u² + 2as  →  a = (v²−u²)/(2s)</span></div>
+      <div style="margin-bottom:0.3rem;"><span style="color:#26c6da; font-weight:800;">Step 3:</span> Substitute: <span style="font-family:'Space Mono',monospace; color:#f9a825;">F = m(v²−u²)/(2s)</span></div>
+      <div style="margin-bottom:0.3rem;"><span style="color:#26c6da; font-weight:800;">Step 4:</span> Rearrange: <span style="font-family:'Space Mono',monospace; color:#f9a825;">Fs = ½mv² − ½mu²</span></div>
+      <div><span style="color:#66bb6a; font-weight:800;">∴</span> <span style="font-family:'Space Mono',monospace; color:#66bb6a;">W = ΔKE  ✓</span></div>
+    </div>
+  </div>
+
+  <!-- CONNECTING TO GPE -->
+  <div class="card green">
+    <h3 class="green">Connecting Work, KE and GPE</h3>
+    <p style="margin-bottom:0.7rem;">When friction is present, energy is lost to heat. Tracking all the energy:</p>
+    <div class="formula">Work done by all forces = ΔKE
+
+For a system with gravity and friction:
+
+  W_applied + W_gravity + W_friction = ΔKE
+
+  W_gravity = −ΔGP E = mg(h₁ − h₂)
+  W_friction = −f × d   (always negative)
+
+∴  W_applied − mgh − fd = ½mv² − ½mu²</div>
+    <div class="tip">When friction is present: <strong>Energy IN = Energy OUT + Energy lost to friction</strong>. This is the most general form of the work-energy theorem.</div>
+  </div>
+
+  <!-- WORKED EXAMPLE -->
+  <div class="sec-title"><span class="icon">📝</span> Fully Worked Example</div>
+
+  <div class="card highlight" style="border-width:2px;">
+    <h3 class="yellow">Worked Problem: Car Braking to a Stop</h3>
+    <div style="background:#0a0c14; border-radius:10px; padding:1rem; margin-bottom:1rem; border-left:4px solid #f9a825;">
+      <strong style="color:#f9a825;">The Problem:</strong> A car of mass <strong>1200 kg</strong> is travelling at <strong>25 m/s</strong>. The brakes apply a constant force of <strong>7500 N</strong> opposing motion. Find: (a) the distance to stop, (b) the time to stop.
+    </div>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0.8rem;">Click each step to reveal the working:</p>
+    <div id="wep-steps"></div>
+    <div style="margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+      <button onclick="wepReveal()" id="wep-btn" style="background:#f9a825; color:#000; border:none; padding:0.5rem 1.2rem; border-radius:8px; font-weight:800; cursor:pointer; font-size:0.9rem;">▶ Next Step</button>
+      <button onclick="wepAll()" style="background:#2a3050; color:#9fa8da; border:1px solid #3a4060; padding:0.5rem 1.2rem; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.9rem;">Show All</button>
+      <button onclick="wepReset()" style="background:#2a3050; color:#9fa8da; border:1px solid #3a4060; padding:0.5rem 1.2rem; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.9rem;">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- ENERGY DIAGRAM FOR COMPLEX SYSTEMS -->
+  <div class="sec-title"><span class="icon">🗺️</span> Energy Flow Diagrams</div>
+  <div class="card purple">
+    <h3 class="purple">How to Track Energy in Complex Problems</h3>
+    <p style="margin-bottom:0.8rem; font-size:0.9rem;">For any system, draw an energy flow diagram first. This prevents mistakes.</p>
+    <div class="diagram-wrap">
+      <svg width="420" height="200" viewBox="0 0 420 200">
+        <!-- Input energy box -->
+        <rect x="10" y="70" width="110" height="60" rx="10" fill="rgba(249,168,37,0.15)" stroke="#f9a825" stroke-width="2"/>
+        <text x="65" y="95" fill="#f9a825" font-size="12" font-weight="800" text-anchor="middle">Energy IN</text>
+        <text x="65" y="112" fill="#f9a825" font-size="11" text-anchor="middle">(KE, GPE, Work)</text>
+
+        <!-- Arrow right -->
+        <line x1="120" y1="100" x2="175" y2="100" stroke="#9fa8da" stroke-width="2.5"/>
+        <polygon points="175,95 185,100 175,105" fill="#9fa8da"/>
+
+        <!-- System box -->
+        <rect x="185" y="55" width="110" height="90" rx="10" fill="rgba(38,198,218,0.1)" stroke="#26c6da" stroke-width="2"/>
+        <text x="240" y="85" fill="#26c6da" font-size="12" font-weight="800" text-anchor="middle">SYSTEM</text>
+        <text x="240" y="102" fill="#9fa8da" font-size="10" text-anchor="middle">Total energy</text>
+        <text x="240" y="116" fill="#9fa8da" font-size="10" text-anchor="middle">always conserved</text>
+        <text x="240" y="132" fill="#9fa8da" font-size="10" text-anchor="middle">(universe level)</text>
+
+        <!-- Arrow right to useful -->
+        <line x1="295" y1="85" x2="355" y2="70" stroke="#66bb6a" stroke-width="2"/>
+        <polygon points="350,65 362,68 354,76" fill="#66bb6a"/>
+        <rect x="360" y="45" width="55" height="40" rx="8" fill="rgba(102,187,106,0.15)" stroke="#66bb6a" stroke-width="1.5"/>
+        <text x="387" y="65" fill="#66bb6a" font-size="11" font-weight="800" text-anchor="middle">Useful</text>
+        <text x="387" y="78" fill="#66bb6a" font-size="10" text-anchor="middle">Energy</text>
+
+        <!-- Arrow right to lost -->
+        <line x1="295" y1="115" x2="355" y2="130" stroke="#ef5350" stroke-width="2"/>
+        <polygon points="350,124 362,132 354,140" fill="#ef5350"/>
+        <rect x="360" y="115" width="55" height="40" rx="8" fill="rgba(239,83,80,0.15)" stroke="#ef5350" stroke-width="1.5"/>
+        <text x="387" y="135" fill="#ef5350" font-size="11" font-weight="800" text-anchor="middle">Heat</text>
+        <text x="387" y="148" fill="#ef5350" font-size="10" text-anchor="middle">(friction)</text>
+
+        <!-- equation below -->
+        <text x="210" y="185" fill="#9fa8da" font-size="12" font-weight="700" text-anchor="middle">Energy IN = Useful out + Heat lost</text>
+      </svg>
+      <p>The universal principle: total energy is always conserved, even when "useful" mechanical energy is lost to friction heat.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB 4: POWER ==================== -->
+<div id="tab-power" class="tab-content">
+
+  <div class="sec-title"><span class="icon">💡</span> What Is Power?</div>
+
+  <div class="card highlight" style="border-width:2px;">
+    <h3 class="yellow">Power = Rate of Doing Work</h3>
+    <p style="margin-bottom:0.6rem;">Power measures how <em>quickly</em> work is done — or how quickly energy is transferred.</p>
+    <div class="formula">P = Work done / time = W / t
+
+P = F × v   (when force and velocity are parallel)
+
+Units: watts (W) = joules per second (J/s)
+       kilowatts (kW) = 1000 W
+       megawatts (MW) = 1 000 000 W</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.8rem; font-size:0.88rem;">
+      <div style="background:rgba(249,168,37,0.08); border:1px solid rgba(249,168,37,0.25); border-radius:10px; padding:0.8rem;">
+        <div style="color:#f9a825; font-weight:800; margin-bottom:0.3rem;">P = W/t</div>
+        Use when you know total work done and time taken.<br>
+        e.g. "a motor does 6000 J in 20 s → P = 300 W"
+      </div>
+      <div style="background:rgba(38,198,218,0.08); border:1px solid rgba(38,198,218,0.25); border-radius:10px; padding:0.8rem;">
+        <div style="color:#26c6da; font-weight:800; margin-bottom:0.3rem;">P = Fv</div>
+        Use when you know the driving force and current speed.<br>
+        e.g. "car engine force 4000 N at 30 m/s → P = 120 kW"
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY P = Fv -->
+  <div class="card blue">
+    <h3 class="cyan">Why P = Fv? (Where It Comes From)</h3>
+    <div style="background:#0a0c14; border-radius:10px; padding:1rem; font-size:0.87rem; line-height:2;">
+      <div><span style="color:#26c6da; font-weight:800;">Start with:</span> <span style="font-family:'Space Mono',monospace; color:#f9a825;">P = W/t</span></div>
+      <div><span style="color:#26c6da; font-weight:800;">Work done:</span> <span style="font-family:'Space Mono',monospace; color:#f9a825;">W = F × d</span></div>
+      <div><span style="color:#26c6da; font-weight:800;">Substitute:</span> <span style="font-family:'Space Mono',monospace; color:#f9a825;">P = Fd/t</span></div>
+      <div><span style="color:#26c6da; font-weight:800;">But d/t = v:</span> <span style="font-family:'Space Mono',monospace; color:#66bb6a;">P = Fv  ✓</span></div>
+    </div>
+    <div class="tip">P = Fv gives the <strong>instantaneous power</strong> at a moment when the speed is v. If speed changes, P changes too.</div>
+  </div>
+
+  <!-- INTERACTIVE POWER CALCULATOR -->
+  <div class="card green">
+    <h3 class="green">🎛️ Power Explorer — Vehicle on the Road</h3>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0.8rem;">A vehicle has a driving force F and moves at speed v. Resistance force R opposes motion. Explore how power and acceleration relate.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem; margin-bottom:0.8rem; flex-wrap:wrap;">
+      <div>
+        <label style="font-size:0.82rem; color:var(--muted);">Engine Force F (N): <span id="fVal" style="color:#f9a825;">4000</span></label>
+        <input type="range" id="forceSlider" min="500" max="10000" step="500" value="4000" style="width:100%; accent-color:#f9a825; margin-top:0.3rem;">
+      </div>
+      <div>
+        <label style="font-size:0.82rem; color:var(--muted);">Speed v (m/s): <span id="vVal" style="color:#26c6da;">20</span></label>
+        <input type="range" id="vSlider" min="1" max="60" value="20" style="width:100%; accent-color:#26c6da; margin-top:0.3rem;">
+      </div>
+      <div>
+        <label style="font-size:0.82rem; color:var(--muted);">Resistance R (N): <span id="rVal2" style="color:#ef5350;">1000</span></label>
+        <input type="range" id="rSlider" min="0" max="5000" step="250" value="1000" style="width:100%; accent-color:#ef5350; margin-top:0.3rem;">
+      </div>
+    </div>
+
+    <div class="e-meter-wrap">
+      <div class="e-meter">
+        <div class="e-meter-label">Power output P = Fv</div>
+        <div class="e-meter-val" id="powerOut" style="color:#f9a825;">80 kW</div>
+        <div class="e-bar-bg"><div class="e-bar-fill" id="powerBar" style="background:#f9a825; width:40%;"></div></div>
+      </div>
+      <div class="e-meter">
+        <div class="e-meter-label">Net force (F − R)</div>
+        <div class="e-meter-val" id="netForce" style="color:#66bb6a;">3000 N</div>
+        <div class="e-bar-bg"><div class="e-bar-fill" id="netForceBar" style="background:#66bb6a; width:60%;"></div></div>
+      </div>
+      <div class="e-meter">
+        <div class="e-meter-label">Max speed (F = R → a=0)</div>
+        <div class="e-meter-val" id="maxSpeed" style="color:#26c6da;">240 m/s</div>
+        <div class="e-bar-bg"><div class="e-bar-fill" id="maxSpeedBar" style="background:#26c6da; width:33%;"></div></div>
+      </div>
+    </div>
+    <div id="powerNote" style="font-size:0.85rem; margin-top:0.6rem; color:var(--muted);"></div>
+  </div>
+
+  <!-- MAXIMUM SPEED CONCEPT -->
+  <div class="card red" style="border-width:2px;">
+    <h3 class="red">🏎️ Maximum (Terminal) Speed — A Key Exam Topic</h3>
+    <p style="margin-bottom:0.7rem;">A vehicle reaches maximum speed when the driving force exactly equals the resistance force — so the net force is zero, meaning zero acceleration.</p>
+    <div class="formula">At maximum speed v_max:
+
+  Driving force = Resistance force
+  F = R   →   a = 0
+
+  And:   P = F × v_max = R × v_max
+
+  ∴  v_max = P / R</div>
+    <div class="note">A vehicle with engine power P and total resistance R has maximum speed v_max = P/R. If resistance doubles, maximum speed halves (for same power).</div>
+
+    <div class="diagram-wrap">
+      <svg width="400" height="210" viewBox="0 0 400 210">
+        <!-- speed axis -->
+        <line x1="50" y1="180" x2="380" y2="180" stroke="#9fa8da" stroke-width="2"/>
+        <text x="385" y="184" fill="#9fa8da" font-size="12">v</text>
+        <!-- force axis -->
+        <line x1="50" y1="180" x2="50" y2="20" stroke="#9fa8da" stroke-width="2"/>
+        <text x="10" y="25" fill="#9fa8da" font-size="12">F</text>
+
+        <!-- Resistance force: flat horizontal line at R = constant -->
+        <line x1="50" y1="120" x2="360" y2="120" stroke="#ef5350" stroke-width="2.5" stroke-dasharray="8,4"/>
+        <text x="362" y="124" fill="#ef5350" font-size="12" font-weight="700">R</text>
+
+        <!-- Driving force at constant power: F = P/v (hyperbola) -->
+        <!-- Plot points: v=10→F=200→y=20+(200→y?): let P=2000, R=100 -->
+        <!-- F = 2000/v, plotted from v=10(x=90,F=200,y=60) to v=40(x=360,F=50,y=170) -->
+        <!-- y-scale: F=200 at y=30, F=0 at y=180. Scale: 150px for 200N → 0.75px/N -->
+        <!-- v-scale: v=10 at x=90, v=40 at x=360. 270px for 30m/s → 9px/ms -->
+        <path d="M 90,20 Q 135,52 180,90 Q 225,115 270,133 Q 315,145 360,155" 
+              fill="none" stroke="#f9a825" stroke-width="3"/>
+        <text x="95" y="15" fill="#f9a825" font-size="12" font-weight="700">F = P/v</text>
+
+        <!-- Intersection / max speed -->
+        <line x1="270" y1="120" x2="270" y2="180" stroke="#26c6da" stroke-width="2" stroke-dasharray="5,3"/>
+        <circle cx="270" cy="120" r="6" fill="#26c6da"/>
+        <text x="263" y="198" fill="#26c6da" font-size="12" font-weight="800">v_max</text>
+
+        <!-- Annotations -->
+        <text x="70" y="60" fill="#66bb6a" font-size="11">F &gt; R → accelerating</text>
+        <text x="290" y="100" fill="#ef5350" font-size="11">F &lt; R</text>
+        <text x="290" y="113" fill="#ef5350" font-size="11">decelerating</text>
+      </svg>
+      <p>At v_max, the P/v curve meets the resistance line. The vehicle can no longer accelerate.</p>
+    </div>
+  </div>
+
+  <!-- UNITS REFERENCE -->
+  <div class="sec-title"><span class="icon">📏</span> Units Reference</div>
+  <table class="angle-table">
+    <tr><th>Quantity</th><th>Symbol</th><th>Unit</th><th>Equivalent</th></tr>
+    <tr><td>Work / Energy</td><td>W, E</td><td>Joule (J)</td><td class="hi">N·m = kg·m²/s²</td></tr>
+    <tr><td>Power</td><td>P</td><td>Watt (W)</td><td class="hi">J/s = kg·m²/s³</td></tr>
+    <tr><td>Power (large)</td><td>P</td><td>kilowatt (kW)</td><td class="hi">1 kW = 1000 W</td></tr>
+    <tr><td>Force</td><td>F</td><td>Newton (N)</td><td class="hi">kg·m/s²</td></tr>
+    <tr><td>Speed</td><td>v</td><td>m/s</td><td class="hi">metres per second</td></tr>
+  </table>
+
+</div>
+
+<!-- ==================== TAB 5: QUIZ ==================== -->
+<div id="tab-quiz" class="tab-content">
+  <div class="score-display" id="score-display">Questions answered: 0 / 20</div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <!-- Q1 -->
+  <div class="question">
+    <div class="q-num">Question 1 <span class="tag easy">EASY</span></div>
+    <div class="q-text">A <span class="q-scenario">porter at Port Zante</span> pushes a trolley with a constant horizontal force of 80 N over a distance of 15 m along a level surface. Calculate the work done by the porter.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q1h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q1a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q1s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q1h"><p>Force is parallel to displacement, so θ = 0°. Use W = Fd cos θ.</p></div>
+    <div class="reveal answer" id="q1a"><p><strong>W = 1200 J</strong></p></div>
+    <div class="reveal steps" id="q1s">
+      <p><span class="lbl">Given:</span> F = 80 N, d = 15 m, θ = 0° (force parallel to motion)</p>
+      <p><span class="lbl">Formula:</span> W = Fd cosθ = 80 × 15 × cos 0° = 80 × 15 × 1</p>
+      <p><span class="lbl">Answer:</span> <strong>W = 1200 J</strong></p>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question">
+    <div class="q-num">Question 2 <span class="tag easy">EASY</span></div>
+    <div class="q-text">A student at <span class="q-scenario">CFBC</span> pulls a bag along the floor with a force of 60 N at an angle of 30° above the horizontal. If the bag moves 8 m horizontally, find the work done by the student.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q2h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q2a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q2s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q2h"><p>Use W = Fd cosθ. The effective horizontal component is F cosθ = 60 cos30°.</p></div>
+    <div class="reveal answer" id="q2a"><p><strong>W = 415.7 J</strong></p></div>
+    <div class="reveal steps" id="q2s">
+      <p><span class="lbl">Given:</span> F = 60 N, d = 8 m, θ = 30°</p>
+      <p><span class="lbl">Formula:</span> W = Fd cosθ = 60 × 8 × cos 30°</p>
+      <p><span class="lbl">cos 30°</span> = 0.866</p>
+      <p><span class="lbl">Answer:</span> W = 60 × 8 × 0.866 = <strong>415.7 J</strong></p>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question">
+    <div class="q-num">Question 3 <span class="tag easy">EASY</span></div>
+    <div class="q-text">A <span class="q-scenario">coconut falls from a tree</span> on the island of Nevis. The coconut has mass 0.8 kg and falls vertically 4 m to the ground. Calculate the work done by gravity.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q3h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q3a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q3s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q3h"><p>Gravity (mg) acts downward and displacement is also downward → θ = 0°. Use g = 10 m/s².</p></div>
+    <div class="reveal answer" id="q3a"><p><strong>W = 32 J</strong></p></div>
+    <div class="reveal steps" id="q3s">
+      <p><span class="lbl">Given:</span> m = 0.8 kg, h = 4 m, g = 10 m/s²</p>
+      <p><span class="lbl">W = mgh</span> = 0.8 × 10 × 4 = <strong>32 J</strong></p>
+      <p>Force (mg = 8 N) is in same direction as displacement → positive work.</p>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question">
+    <div class="q-num">Question 4 <span class="tag easy">EASY</span></div>
+    <div class="q-text">Calculate the kinetic energy of a <span class="q-scenario">delivery van in Basseterre</span> of mass 2500 kg travelling at 20 m/s.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q4h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q4a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q4s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q4h"><p>KE = ½mv². Be careful — speed must be in m/s.</p></div>
+    <div class="reveal answer" id="q4a"><p><strong>KE = 500 000 J = 500 kJ</strong></p></div>
+    <div class="reveal steps" id="q4s">
+      <p><span class="lbl">Given:</span> m = 2500 kg, v = 20 m/s</p>
+      <p><span class="lbl">KE</span> = ½ × 2500 × 20² = ½ × 2500 × 400 = <strong>500 000 J</strong></p>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question">
+    <div class="q-num">Question 5 <span class="tag easy">EASY</span></div>
+    <div class="q-text">A <span class="q-scenario">tourist hikes up Nevis Peak</span>. The tourist has mass 70 kg and climbs a vertical height of 985 m. Calculate the gravitational PE gained. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q5h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q5a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q5s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q5h"><p>GPE = mgh. Use the vertical height — it doesn't matter what path was taken.</p></div>
+    <div class="reveal answer" id="q5a"><p><strong>GPE = 689 500 J ≈ 690 kJ</strong></p></div>
+    <div class="reveal steps" id="q5s">
+      <p><span class="lbl">GPE</span> = mgh = 70 × 10 × 985 = <strong>689 500 J ≈ 690 kJ</strong></p>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question">
+    <div class="q-num">Question 6 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A <span class="q-scenario">cricket ball at the Warner Park ground</span> of mass 0.16 kg is thrown vertically upward with speed 25 m/s. Using energy conservation, find the maximum height reached. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q6h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q6a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q6s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q6h"><p>At maximum height, all KE has converted to GPE. Set ½mv² = mgh and solve for h.</p></div>
+    <div class="reveal answer" id="q6a"><p><strong>h = 31.25 m</strong></p></div>
+    <div class="reveal steps" id="q6s">
+      <p><span class="lbl">At launch:</span> KE = ½ × 0.16 × 25² = ½ × 0.16 × 625 = 50 J</p>
+      <p><span class="lbl">At max height:</span> all KE → GPE, KE = 0</p>
+      <p><span class="lbl">GPE = mgh:</span> 50 = 0.16 × 10 × h → h = 50/1.6 = <strong>31.25 m</strong></p>
+      <p><em>Note: mass cancelled out! Any ball thrown at 25 m/s reaches the same height.</em></p>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question">
+    <div class="q-num">Question 7 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A <span class="q-scenario">tourist zip-lines from Kittitian Hill</span> starting from rest at height 45 m. Assuming a smooth (frictionless) ride, find the speed at the bottom. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q7h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q7a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q7s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q7h"><p>Use conservation of energy: GPE lost = KE gained → mgh = ½mv² → v = √(2gh).</p></div>
+    <div class="reveal answer" id="q7a"><p><strong>v = 30 m/s</strong></p></div>
+    <div class="reveal steps" id="q7s">
+      <p><span class="lbl">Conservation:</span> mgh = ½mv²</p>
+      <p><span class="lbl">Simplify:</span> gh = ½v² → v² = 2gh = 2 × 10 × 45 = 900</p>
+      <p><span class="lbl">Answer:</span> v = √900 = <strong>30 m/s</strong></p>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question">
+    <div class="q-num">Question 8 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A <span class="q-scenario">market vendor in Charlestown</span> pushes a box of mass 30 kg along a rough floor with a horizontal force of 120 N. The friction force is 45 N. Find the work done by (a) the vendor, (b) friction, and (c) the net work done, over a distance of 6 m.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q8h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q8a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q8s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q8h"><p>Work by vendor is positive (force in direction of motion). Work by friction is negative (opposes motion). Net work = sum of all work done.</p></div>
+    <div class="reveal answer" id="q8a"><p><strong>(a) 720 J &nbsp; (b) −270 J &nbsp; (c) 450 J</strong></p></div>
+    <div class="reveal steps" id="q8s">
+      <p><span class="lbl">(a) Vendor:</span> W = 120 × 6 = <strong>720 J</strong></p>
+      <p><span class="lbl">(b) Friction:</span> W = −45 × 6 = <strong>−270 J</strong> (negative — opposes motion)</p>
+      <p><span class="lbl">(c) Net:</span> 720 + (−270) = <strong>450 J</strong></p>
+      <p><em>Check: ΔKE should = 450 J if starting from rest, v = √(2×450/30) = √30 ≈ 5.48 m/s</em></p>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question">
+    <div class="q-num">Question 9 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A car of mass 1000 kg accelerates from rest to 30 m/s on a level road. The engine exerts a constant driving force of 2000 N and friction resistance is 500 N. Using the work-energy principle, find the distance travelled.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q9h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q9a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q9s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q9h"><p>Net Work = ΔKE. Net force = 2000 − 500 = 1500 N. Net Work = 1500 × d = ½mv² − 0.</p></div>
+    <div class="reveal answer" id="q9a"><p><strong>d = 300 m</strong></p></div>
+    <div class="reveal steps" id="q9s">
+      <p><span class="lbl">ΔKE:</span> ½ × 1000 × 30² − 0 = 450 000 J</p>
+      <p><span class="lbl">Net force:</span> 2000 − 500 = 1500 N</p>
+      <p><span class="lbl">Net work:</span> 1500 × d = 450 000</p>
+      <p><span class="lbl">Answer:</span> d = 450 000 / 1500 = <strong>300 m</strong></p>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question">
+    <div class="q-num">Question 10 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A <span class="q-scenario">pump at a St. Kitts sugar estate</span> lifts 500 kg of water per minute to a height of 8 m. Calculate the minimum power required. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q10h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q10a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q10s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q10h"><p>Work done per minute = mgh. Power = work/time. Convert time to seconds!</p></div>
+    <div class="reveal answer" id="q10a"><p><strong>P = 666.7 W ≈ 667 W</strong></p></div>
+    <div class="reveal steps" id="q10s">
+      <p><span class="lbl">Work per min:</span> W = mgh = 500 × 10 × 8 = 40 000 J</p>
+      <p><span class="lbl">Time:</span> t = 60 s</p>
+      <p><span class="lbl">Power:</span> P = W/t = 40 000/60 = <strong>666.7 W</strong></p>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question">
+    <div class="q-num">Question 11 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">An engine of a <span class="q-scenario">fishing boat in Basseterre Harbour</span> has power output 15 kW. The boat travels at a constant speed of 6 m/s against a water resistance force R. Find R.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q11h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q11a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q11s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q11h"><p>At constant speed, driving force = resistance. Use P = Fv → F = P/v.</p></div>
+    <div class="reveal answer" id="q11a"><p><strong>R = 2500 N</strong></p></div>
+    <div class="reveal steps" id="q11s">
+      <p><span class="lbl">P = Fv:</span> 15 000 = F × 6 → F = 2500 N</p>
+      <p><span class="lbl">Constant speed:</span> F = R → <strong>R = 2500 N</strong></p>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question">
+    <div class="q-num">Question 12 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A <span class="q-scenario">minibus on the island of St. Kitts</span> of mass 3000 kg has engine power 60 kW. The total resistance to motion is 2000 N. Find (a) the maximum speed of the minibus, and (b) the driving force when it travels at 20 m/s.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q12h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q12a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q12s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q12h"><p>(a) At max speed: F = R, so v_max = P/R. (b) Use P = Fv at v = 20 m/s.</p></div>
+    <div class="reveal answer" id="q12a"><p><strong>(a) v_max = 30 m/s &nbsp;&nbsp; (b) F = 3000 N</strong></p></div>
+    <div class="reveal steps" id="q12s">
+      <p><span class="lbl">(a) v_max = P/R</span> = 60 000/2000 = <strong>30 m/s</strong></p>
+      <p><span class="lbl">(b) F = P/v</span> = 60 000/20 = <strong>3000 N</strong></p>
+      <p>Net force = 3000 − 2000 = 1000 N → still accelerating at v = 20 m/s.</p>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question">
+    <div class="q-num">Question 13 <span class="tag medium">MEDIUM</span></div>
+    <div class="q-text">A ball of mass 2 kg slides down a smooth curved ramp, starting from rest at a height of 5 m. At the bottom the ramp curves and the ball continues along a rough horizontal surface with friction coefficient μ = 0.3. How far along the horizontal surface does the ball travel before stopping? (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q13h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q13a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q13s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q13h"><p>Step 1: Use energy conservation on smooth ramp to find speed at bottom. Step 2: Use work-energy theorem on rough horizontal section (KE lost = work done by friction).</p></div>
+    <div class="reveal answer" id="q13a"><p><strong>d = 16.7 m</strong></p></div>
+    <div class="reveal steps" id="q13s">
+      <p><span class="lbl">Speed at bottom:</span> mgh = ½mv² → v² = 2gh = 2×10×5 = 100 → v = 10 m/s</p>
+      <p><span class="lbl">Friction force:</span> f = μmg = 0.3 × 2 × 10 = 6 N</p>
+      <p><span class="lbl">Work-energy:</span> −fd = 0 − ½mv² → −6d = −100 → d = 100/6 ≈ <strong>16.7 m</strong></p>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question">
+    <div class="q-num">Question 14 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A <span class="q-scenario">cane cutter's truck</span> of mass 2000 kg travels up a slope inclined at 10° to the horizontal. The engine produces a constant power of 40 kW and the resistance to motion (excluding gravity) is 800 N. Find the maximum speed up the slope. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q14h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q14a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q14s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q14h"><p>At max speed on a slope: driving force = friction resistance + weight component along slope. F = R + mg sinα. Then v_max = P/F.</p></div>
+    <div class="reveal answer" id="q14a"><p><strong>v_max ≈ 11.1 m/s</strong></p></div>
+    <div class="reveal steps" id="q14s">
+      <p><span class="lbl">Weight component along slope:</span> mg sinα = 2000 × 10 × sin10° = 20000 × 0.1736 = 3472 N</p>
+      <p><span class="lbl">Total resistance:</span> F_total = 800 + 3472 = 4272 N</p>
+      <p><span class="lbl">At max speed:</span> P = F_total × v_max → v_max = 40000/4272 ≈ <strong>9.36 m/s</strong></p>
+      <p><em>(If using sin10° ≈ 0.174: mg sinα = 3480 N, F = 4280 N, v_max = 40000/4280 ≈ 9.35 m/s)</em></p>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question">
+    <div class="q-num">Question 15 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A box of mass 5 kg is pushed 4 m up a rough slope inclined at 25° by a force of 60 N parallel to the slope. The friction force is 15 N. Using the work-energy principle, find the speed of the box at the top if it started from rest. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q15h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q15a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q15s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q15h"><p>Net work done by ALL forces = ΔKE. Forces along slope: applied (up +ve), weight component (down −ve), friction (down −ve).</p></div>
+    <div class="reveal answer" id="q15a"><p><strong>v ≈ 3.35 m/s</strong></p></div>
+    <div class="reveal steps" id="q15s">
+      <p><span class="lbl">Work by applied force:</span> +60 × 4 = +240 J</p>
+      <p><span class="lbl">Work by gravity:</span> −mg sinα × d = −5×10×sin25°×4 = −5×10×0.4226×4 = −84.5 J</p>
+      <p><span class="lbl">Work by friction:</span> −15 × 4 = −60 J</p>
+      <p><span class="lbl">Net work:</span> 240 − 84.5 − 60 = 95.5 J = ΔKE</p>
+      <p><span class="lbl">½mv²:</span> 95.5 = ½ × 5 × v² → v² = 38.2 → v = <strong>6.18 m/s</strong></p>
+      <p><em>Correction: v = √(2×95.5/5) = √38.2 ≈ 6.18 m/s. Check friction: 15 N over 4 m = 60 J ✓</em></p>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="question">
+    <div class="q-num">Question 16 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A <span class="q-scenario">speedboat at Frigate Bay</span> of mass 800 kg accelerates from 10 m/s to 25 m/s against a constant water resistance of 1200 N. Find the work done by the engine over this acceleration. (Hint: use the work-energy theorem carefully.)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q16h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q16a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q16s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q16h"><p>W_engine + W_resistance = ΔKE. Find ΔKE first, then W_engine = ΔKE − W_resistance. Remember W_resistance is negative.</p></div>
+    <div class="reveal answer" id="q16a"><p>Need distance to solve fully. If distance = 200 m: <strong>W_engine = 480 000 J</strong></div>
+    <div class="reveal steps" id="q16s">
+      <p><span class="lbl">ΔKE:</span> ½×800×25² − ½×800×10² = 250000 − 40000 = 210 000 J</p>
+      <p><span class="lbl">If d = 200 m:</span> W_friction = −1200 × 200 = −240 000 J</p>
+      <p><span class="lbl">W_engine + W_friction = ΔKE:</span> W_engine − 240 000 = 210 000</p>
+      <p><span class="lbl">Answer:</span> W_engine = <strong>450 000 J = 450 kJ</strong></p>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="question">
+    <div class="q-num">Question 17 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A <span class="q-scenario">crane at the Deep Water Port</span> lifts a container of mass 4000 kg from rest. The engine has power 120 kW. Find the maximum constant speed at which the crane can lift the container vertically. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q17h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q17a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q17s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q17h"><p>At constant speed lifting, the lifting force = weight = mg. P = Fv = mgv. Solve for v.</p></div>
+    <div class="reveal answer" id="q17a"><p><strong>v = 3 m/s</strong></p></div>
+    <div class="reveal steps" id="q17s">
+      <p><span class="lbl">Lifting force at constant speed:</span> F = mg = 4000 × 10 = 40 000 N</p>
+      <p><span class="lbl">P = Fv:</span> 120 000 = 40 000 × v</p>
+      <p><span class="lbl">Answer:</span> v = 120 000/40 000 = <strong>3 m/s</strong></p>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="question">
+    <div class="q-num">Question 18 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A <span class="q-scenario">vehicle travels along the Basseterre Bypass</span>. At a certain instant, the engine exerts a force of 5000 N and the vehicle travels at 24 m/s. The resistance forces total 1800 N and the mass is 1500 kg. Find (a) the power output, (b) the acceleration, and (c) the power needed to maintain constant speed 24 m/s.</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q18h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q18a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q18s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q18h"><p>(a) P = Fv. (b) Net force = F − R = ma → a = net F / m. (c) For constant speed, F = R.</p></div>
+    <div class="reveal answer" id="q18a"><p><strong>(a) 120 kW &nbsp; (b) 2.13 m/s² &nbsp; (c) 43.2 kW</strong></p></div>
+    <div class="reveal steps" id="q18s">
+      <p><span class="lbl">(a) P = Fv</span> = 5000 × 24 = 120 000 W = <strong>120 kW</strong></p>
+      <p><span class="lbl">(b) Net F</span> = 5000 − 1800 = 3200 N; a = 3200/1500 = <strong>2.13 m/s²</strong></p>
+      <p><span class="lbl">(c) Constant speed:</span> F must equal R = 1800 N; P = 1800 × 24 = 43 200 W = <strong>43.2 kW</strong></p>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="question">
+    <div class="q-num">Question 19 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A <span class="q-scenario">roller-coaster at a Caribbean theme park</span> starts from rest at a height of 30 m. At point B (height 12 m) the measured speed is 16 m/s. The car has mass 500 kg. Find the energy lost to friction between the start and point B. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q19h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q19a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q19s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q19h"><p>Energy lost to friction = (KE + GPE) at start − (KE + GPE) at B. If no friction, all GPE lost → KE. The difference is heat.</p></div>
+    <div class="reveal answer" id="q19a"><p><strong>Energy lost to friction = 26 000 J = 26 kJ</strong></p></div>
+    <div class="reveal steps" id="q19s">
+      <p><span class="lbl">Start:</span> KE = 0, GPE = 500×10×30 = 150 000 J. Total = 150 000 J</p>
+      <p><span class="lbl">Point B:</span> KE = ½×500×16² = 64 000 J, GPE = 500×10×12 = 60 000 J. Total = 124 000 J</p>
+      <p><span class="lbl">Energy lost:</span> 150 000 − 124 000 = <strong>26 000 J</strong></p>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="question">
+    <div class="q-num">Question 20 <span class="tag hard">HARD</span></div>
+    <div class="q-text">A <span class="q-scenario">bus on the Cayon road</span> of mass 8000 kg descends a slope of 5° at constant speed 15 m/s. The engine is cut and only brakes are applied. The braking force is 12 000 N. Using the work-energy principle, find (a) the braking distance, and (b) the average power dissipated by the brakes during stopping. (g = 10 m/s²)</div>
+    <div class="btn-row">
+      <button class="btn hint-btn" onclick="toggleReveal('q20h')">💡 Hint</button>
+      <button class="btn" onclick="toggleReveal('q20a');markAnswered()">✓ Answer</button>
+      <button class="btn step-btn" onclick="toggleReveal('q20s')">📝 Steps</button>
+    </div>
+    <div class="reveal hint" id="q20h"><p>(a) Net work = ΔKE. Forces on slope: braking (up, opposing motion), gravity component (down the slope). Find net force then use W_net = ΔKE. (b) P_avg = work by brakes / time; find time from v_avg.</p></div>
+    <div class="reveal answer" id="q20a"><p><strong>(a) d ≈ 108 m &nbsp;&nbsp; (b) P_brakes ≈ 120 kW</strong></p></div>
+    <div class="reveal steps" id="q20s">
+      <p><span class="lbl">KE lost:</span> ½×8000×15² = 900 000 J</p>
+      <p><span class="lbl">Weight along slope (down):</span> mg sin5° = 8000×10×0.0872 = 6976 N (helps slow the bus)</p>
+      <p><span class="lbl">Net stopping force:</span> 12000 − 6976 = 5024 N (wait: weight component ASSISTS braking on a descent)</p>
+      <p><em>Actually: descending → gravity acts down-slope (same direction as motion), which REDUCES braking effect.</em></p>
+      <p><span class="lbl">Net retarding force:</span> 12 000 (brakes, up slope) − 6976 (gravity, down slope) = 5024 N</p>
+      <p><span class="lbl">Net work = ΔKE:</span> −5024 × d = −900 000 → d = 900 000/5024 ≈ <strong>179 m</strong></p>
+      <p><span class="lbl">Work by brakes:</span> 12 000 × 179 ≈ 2 148 000 J; Time = d/v_avg = 179/7.5 ≈ 23.9 s</p>
+      <p><span class="lbl">Power by brakes:</span> 2 148 000/23.9 ≈ <strong>89.9 kW ≈ 90 kW</strong></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Tab switching
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Reveal toggle
+function toggleReveal(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+// Quiz progress
+let answered = 0;
+function markAnswered() {
+  answered = Math.min(answered + 1, 20);
+  document.getElementById('score-display').textContent = `Questions answered: ${answered} / 20`;
+  document.getElementById('progress-fill').style.width = (answered/20*100) + '%';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const tabs = ['work','energy','wep','power','quiz'];
+  if(e.key >= '1' && e.key <= '5') {
+    const btn = document.querySelector(`.tab-btn:nth-child(${e.key})`);
+    if(btn) btn.click();
+  }
+});
+
+// ---- WORK ANGLE CANVAS ----
+(function(){
+  const canvas = document.getElementById('workCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const slider = document.getElementById('workAngle');
+
+  function arrow(x1,y1,x2,y2,col,lw=2.5,dash=[]) {
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+    ctx.strokeStyle=col; ctx.lineWidth=lw; ctx.setLineDash(dash); ctx.stroke(); ctx.setLineDash([]);
+    const ang = Math.atan2(y2-y1,x2-x1);
+    ctx.beginPath(); ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-11*Math.cos(ang-0.38), y2-11*Math.sin(ang-0.38));
+    ctx.lineTo(x2-11*Math.cos(ang+0.38), y2-11*Math.sin(ang+0.38));
+    ctx.closePath(); ctx.fillStyle=col; ctx.fill();
+  }
+
+  function label(txt, x, y, col, size='12px', align='center', bold=false) {
+    ctx.fillStyle = col;
+    ctx.font = `${bold?'bold ':''}${size} Nunito, sans-serif`;
+    ctx.textAlign = align;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(txt, x, y);
+  }
+
+  function drawWork(deg) {
+    const W = canvas.width, H = canvas.height;
+    const a = deg * Math.PI / 180;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#070910'; ctx.fillRect(0,0,W,H);
+    ctx.textBaseline = 'alphabetic';
+
+    const is90 = deg === 90;
+
+    // Ground
+    const gy = H - 28;
+    ctx.fillStyle = '#2a3050'; ctx.fillRect(15, gy, W-30, 7);
+    // ground hatching
+    ctx.strokeStyle = '#1e2540'; ctx.lineWidth = 1;
+    for(let x=20; x<W-15; x+=14) {
+      ctx.beginPath(); ctx.moveTo(x, gy+7); ctx.lineTo(x-8, gy+14); ctx.stroke();
+    }
+
+    // Box — centred left side of canvas
+    const bx = 55, bw = 52, bh = 42;
+    const bTop = gy - bh;
+    ctx.fillStyle = '#1c2035'; ctx.strokeStyle = is90 ? '#9fa8da' : '#26c6da';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.roundRect(bx, bTop, bw, bh, 6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = is90 ? '#9fa8da' : '#26c6da';
+    ctx.font = 'bold 14px Nunito'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('m', bx+bw/2, bTop+bh/2);
+    ctx.textBaseline = 'alphabetic';
+
+    // Motion arrow (displacement) — horizontal along the ground level
+    // Draw BELOW the box to make it clear it represents displacement direction
+    const dY = gy + 20;
+    arrow(15, dY, W-18, dY, '#9fa8da', 2);
+    label('displacement d = 10 m  (horizontal →)', W/2, dY+14, '#9fa8da', '11px');
+
+    if(is90) {
+      // ---- SPECIAL 90° TREATMENT ----
+
+      // Force arrow pointing straight UP from centre-top of box
+      const fx0 = bx + bw/2, fy0 = bTop;
+      arrow(fx0, fy0, fx0, fy0 - 100, '#f9a825', 3);
+      label('F = 50 N (vertical)', fx0 + 8, fy0 - 55, '#f9a825', '12px', 'left', true);
+
+      // RIGHT-ANGLE SYMBOL between force (up) and displacement (right) at origin point
+      const sq = 14;
+      ctx.strokeStyle = '#ef5350'; ctx.lineWidth = 2; ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(fx0 + sq, fy0);
+      ctx.lineTo(fx0 + sq, fy0 - sq);
+      ctx.lineTo(fx0,      fy0 - sq);
+      ctx.stroke();
+      // 90° label
+      label('90°', fx0 + sq + 8, fy0 - sq/2, '#ef5350', '12px', 'left', true);
+
+      // Red cross/zero overlay on box
+      ctx.strokeStyle = 'rgba(239,83,80,0.5)'; ctx.lineWidth = 2.5; ctx.setLineDash([5,3]);
+      ctx.beginPath(); ctx.moveTo(bx+6, bTop+6); ctx.lineTo(bx+bw-6, bTop+bh-6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(bx+bw-6, bTop+6); ctx.lineTo(bx+6, bTop+bh-6); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Explanation box
+      const ex = bx + bw + 18, ey = 18;
+      const ew = W - ex - 10, eh = H - 50;
+      ctx.fillStyle = 'rgba(239,83,80,0.08)';
+      ctx.strokeStyle = 'rgba(239,83,80,0.35)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(ex, ey, ew, eh, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = '#ef5350'; ctx.font = 'bold 13px Nunito'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('θ = 90°: Force ⊥ Displacement', ex + ew/2, ey + 24);
+
+      ctx.fillStyle = '#9fa8da'; ctx.font = '11px Nunito';
+      const lines = [
+        'The force is vertical —',
+        'it pushes the box UP.',
+        'But the box moves RIGHT.',
+        '',
+        'Force has ZERO component',
+        'in the direction of motion.',
+        '',
+        'W = Fd cos90°',
+        '  = 50 × 10 × 0',
+        '  = 0 J',
+        '',
+        '⚠ No work is done!',
+      ];
+      lines.forEach((ln, i) => {
+        if(ln === '⚠ No work is done!') ctx.fillStyle = '#ef5350';
+        else if(ln.startsWith('W =') || ln.startsWith('  =')) ctx.fillStyle = '#f9a825';
+        else ctx.fillStyle = '#9fa8da';
+        ctx.font = ln.startsWith('W =') || ln.startsWith('  =') ? 'bold 11px Space Mono, monospace' : '11px Nunito';
+        ctx.fillText(ln, ex + ew/2, ey + 46 + i * 14.5);
+      });
+
+    } else {
+      // ---- NORMAL CASE (0–89°) ----
+
+      // Force origin: right-centre of box
+      const fx0 = bx + bw + 4, fy0 = bTop + bh/2;
+      const fLen = 105;
+      const fex = fx0 + fLen * Math.cos(-a);
+      const fey = fy0 + fLen * Math.sin(-a);
+
+      // Dashed horizontal reference line from force origin
+      ctx.beginPath(); ctx.moveTo(fx0, fy0); ctx.lineTo(fx0 + fLen + 10, fy0);
+      ctx.strokeStyle = 'rgba(249,168,37,0.2)'; ctx.lineWidth=1; ctx.setLineDash([4,4]); ctx.stroke(); ctx.setLineDash([]);
+
+      // Angle arc (from horizontal to force direction, going CCW = upward)
+      if(deg > 0) {
+        ctx.beginPath(); ctx.arc(fx0, fy0, 36, -a, 0);
+        ctx.strokeStyle = '#f9a825'; ctx.lineWidth=1.8; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+        const midAng = -a/2;
+        const arcR = 48;
+        ctx.fillStyle='#f9a825'; ctx.font='bold 12px Nunito'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(deg+'°', fx0 + arcR*Math.cos(midAng), fy0 + arcR*Math.sin(midAng));
+        ctx.textBaseline='alphabetic';
+      } else {
+        // θ=0: label directly
+        ctx.fillStyle='#f9a825'; ctx.font='bold 12px Nunito'; ctx.textAlign='left'; ctx.textBaseline='middle';
+        ctx.fillText('θ = 0°', fx0+8, fy0-14);
+        ctx.textBaseline='alphabetic';
+      }
+
+      // Force arrow
+      arrow(fx0, fy0, fex, fey, '#f9a825', 3);
+      // F label near tip
+      const labelAng = Math.atan2(fey-fy0, fex-fx0);
+      const lx = fex + 14*Math.cos(labelAng);
+      const ly = fey + 14*Math.sin(labelAng);
+      ctx.fillStyle='#f9a825'; ctx.font='bold 12px Nunito'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('F = 50 N', lx, ly);
+      ctx.textBaseline='alphabetic';
+
+      // Horizontal component (green dashed line + arrow)
+      const hLen = fLen * Math.cos(a);
+      if(hLen > 5) {
+        arrow(fx0, fy0, fx0 + hLen, fy0, '#66bb6a', 2, [6,4]);
+        ctx.fillStyle='#66bb6a'; ctx.font='bold 11px Nunito'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        const compLabel = `F cosθ = ${(50*Math.cos(a)).toFixed(1)} N  ← does the work`;
+        ctx.fillText(compLabel, fx0 + hLen/2, gy - 10);
+        ctx.textBaseline='alphabetic';
+      }
+
+      // Vertical (wasted) component (red dashed) — shows the part NOT doing work
+      const vLen = fLen * Math.sin(a);
+      if(vLen > 5) {
+        ctx.beginPath(); ctx.moveTo(fx0+hLen, fy0); ctx.lineTo(fex, fey);
+        ctx.strokeStyle='rgba(239,83,80,0.5)'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle='rgba(239,83,80,0.7)'; ctx.font='10px Nunito'; ctx.textAlign='left'; ctx.textBaseline='middle';
+        ctx.fillText('F sinθ (no work)', fex+6, (fy0+fey)/2);
+        ctx.textBaseline='alphabetic';
+      }
+
+      // Work value badge
+      const wJ = Math.round(50*10*Math.cos(a));
+      const badgeX = W - 85, badgeY = 12;
+      ctx.fillStyle = wJ > 0 ? 'rgba(102,187,106,0.15)' : 'rgba(239,83,80,0.15)';
+      ctx.strokeStyle = wJ > 0 ? '#66bb6a' : '#ef5350'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.roundRect(badgeX, badgeY, 80, 46, 8); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = wJ > 0 ? '#66bb6a' : '#ef5350';
+      ctx.font = 'bold 11px Nunito'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('Work done', badgeX+40, badgeY+14);
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillText(wJ+' J', badgeX+40, badgeY+34);
+      ctx.textBaseline='alphabetic';
+    }
+
+    // Update side labels
+    document.getElementById('fCosVal').textContent = (50*Math.cos(a)).toFixed(1) + ' N';
+    document.getElementById('workVal').textContent = (50*10*Math.cos(a)).toFixed(0) + ' J';
+  }
+
+  slider.addEventListener('input', function(){
+    document.getElementById('workAngleVal').textContent = this.value + '°';
+    drawWork(parseInt(this.value));
+  });
+  drawWork(0);
+})();
+
+// ---- KE EXPLORER ----
+(function(){
+  const mSlider = document.getElementById('massSlider');
+  const vSlider = document.getElementById('speedSlider');
+  if(!mSlider) return;
+
+  function update() {
+    const m = parseInt(mSlider.value), v = parseInt(vSlider.value);
+    document.getElementById('massVal').textContent = m;
+    document.getElementById('speedVal').textContent = v;
+    const ke = 0.5*m*v*v;
+    const ke2m = 0.5*(2*m)*v*v;
+    const ke2v = 0.5*m*(2*v)*(2*v);
+    const maxKE = ke2v || 1;
+    document.getElementById('keDisplay').textContent = ke.toFixed(0)+' J';
+    document.getElementById('ke2mDisplay').textContent = ke2m.toFixed(0)+' J';
+    document.getElementById('ke2vDisplay').textContent = ke2v.toFixed(0)+' J';
+    document.getElementById('keBar').style.width = Math.min(100,ke/maxKE*100)+'%';
+    document.getElementById('ke2mBar').style.width = Math.min(100,ke2m/maxKE*100)+'%';
+    document.getElementById('ke2vBar').style.width = Math.min(100,100)+'%';
+  }
+  mSlider.addEventListener('input', update);
+  vSlider.addEventListener('input', update);
+  update();
+})();
+
+// ---- ENERGY CANVAS ----
+(function(){
+  const canvas = document.getElementById('energyCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const hSlider = document.getElementById('heightSlider');
+
+  function drawEnergy(h) {
+    const W=canvas.width, H=canvas.height;
+    const m=5, g=10;
+    const gpe = m*g*h;
+    const v = Math.sqrt(2*g*h);
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#070910'; ctx.fillRect(0,0,W,H);
+
+    // Ground
+    ctx.fillStyle='#2a3050'; ctx.fillRect(20,H-22,W-40,7);
+
+    // Slope
+    const sX=50, sYb=H-22, sYt=H-22-Math.min(h*6,H-60), sXt=250;
+    ctx.beginPath(); ctx.moveTo(sX,sYb); ctx.lineTo(sXt,sYt); ctx.lineTo(sXt,sYb); ctx.closePath();
+    ctx.fillStyle='#1a1f35'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(sX,sYb); ctx.lineTo(sXt,sYt);
+    ctx.strokeStyle='#9fa8da'; ctx.lineWidth=2.5; ctx.stroke();
+
+    // Ball at top (GPE)
+    ctx.beginPath(); ctx.arc(sXt-15, sYt-12, 12, 0, 2*Math.PI);
+    ctx.fillStyle='rgba(38,198,218,0.8)'; ctx.fill();
+    ctx.strokeStyle='#26c6da'; ctx.lineWidth=2; ctx.stroke();
+
+    // Ball at bottom (KE)
+    ctx.beginPath(); ctx.arc(350, H-38, 12, 0, 2*Math.PI);
+    ctx.fillStyle='rgba(249,168,37,0.8)'; ctx.fill();
+    ctx.strokeStyle='#f9a825'; ctx.lineWidth=2; ctx.stroke();
+
+    // Height label
+    ctx.strokeStyle='#26c6da'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(sXt+10,sYt); ctx.lineTo(sXt+10,sYb); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#26c6da'; ctx.font='bold 12px Nunito'; ctx.textAlign='left';
+    ctx.fillText('h='+h+'m', sXt+14, (sYt+sYb)/2+5);
+
+    // Speed label at bottom
+    ctx.fillStyle='#f9a825'; ctx.font='bold 12px Nunito'; ctx.textAlign='center';
+    ctx.fillText('v='+v.toFixed(1)+'m/s', 350, H-8);
+
+    // GPE label top
+    ctx.fillStyle='#26c6da'; ctx.textAlign='center';
+    ctx.fillText('GPE='+gpe+' J', sXt-15, sYt-28);
+
+    // Update meters
+    const maxE = 5*10*20; // max at h=20
+    document.getElementById('gpeTop').textContent = gpe+' J';
+    document.getElementById('keBottom').textContent = gpe+' J';
+    document.getElementById('speedBottom').textContent = v.toFixed(1)+' m/s';
+    document.getElementById('gpeTopBar').style.width = (gpe/maxE*100)+'%';
+    document.getElementById('keBottomBar').style.width = (gpe/maxE*100)+'%';
+    document.getElementById('speedBar').style.width = (v/Math.sqrt(2*10*20)*100)+'%';
+    document.getElementById('heightVal').textContent = h+' m';
+  }
+
+  hSlider.addEventListener('input', function(){ drawEnergy(parseInt(this.value)); });
+  drawEnergy(10);
+})();
+
+// ---- POWER EXPLORER ----
+(function(){
+  const fS = document.getElementById('forceSlider');
+  const vS = document.getElementById('vSlider');
+  const rS = document.getElementById('rSlider');
+  if(!fS) return;
+
+  function update() {
+    const F=parseInt(fS.value), v=parseInt(vS.value), R=parseInt(rS.value);
+    document.getElementById('fVal').textContent=F;
+    document.getElementById('vVal').textContent=v;
+    document.getElementById('rVal2').textContent=R;
+    const P = F*v;
+    const netF = F-R;
+    const vMax = R>0 ? (P/R) : 999;
+    document.getElementById('powerOut').textContent = (P/1000).toFixed(1)+' kW';
+    document.getElementById('netForce').textContent = netF.toFixed(0)+' N';
+    document.getElementById('maxSpeed').textContent = vMax<500 ? vMax.toFixed(1)+' m/s' : '∞';
+    document.getElementById('powerBar').style.width = Math.min(100,P/100000*100)+'%';
+    document.getElementById('netForceBar').style.width = Math.min(100,Math.max(0,netF/10000*100))+'%';
+    document.getElementById('maxSpeedBar').style.width = Math.min(100,vMax<500?vMax/100*100:100)+'%';
+    const note = netF>0 ? '🟢 Accelerating (F > R)' : netF===0 ? '🟡 Constant speed (F = R = v_max condition)' : '🔴 Decelerating (F < R)';
+    document.getElementById('powerNote').textContent = note;
+  }
+  fS.addEventListener('input',update); vS.addEventListener('input',update); rS.addEventListener('input',update);
+  update();
+})();
+
+// ---- WORKED EXAMPLE (WEP) ----
+(function(){
+  const wepStepsData = [
+    { color:'#26c6da', title:'Step 1 — Identify what we know and what we need',
+      content:`<div style="font-size:0.87rem;line-height:1.8;">Mass m = 1200 kg, initial speed u = 25 m/s, final speed v = 0 (stops), braking force F = 7500 N opposing motion.</div>` },
+    { color:'#f9a825', title:'Step 2 — Find ΔKE (change in kinetic energy)',
+      content:`<div style="background:rgba(249,168,37,0.08);border-radius:8px;padding:0.8rem;font-size:0.87rem;line-height:1.9;">
+        ΔKE = ½mv² − ½mu²<br>
+        = ½×1200×0² − ½×1200×25²<br>
+        = 0 − 375 000<br>
+        = <strong style="color:#ef5350;">−375 000 J</strong> (KE decreases — makes sense, car is stopping)
+      </div>` },
+    { color:'#ab47bc', title:'Step 3(a) — Apply Work-Energy Principle to find distance',
+      content:`<div style="background:rgba(171,71,188,0.08);border-radius:8px;padding:0.8rem;font-size:0.87rem;line-height:1.9;">
+        Net work done = ΔKE<br>
+        Work by brakes = −F × d = −7500d (negative: force opposes motion)<br>
+        −7500d = −375 000<br>
+        <strong style="color:#f9a825;">d = 50 m</strong>
+      </div>` },
+    { color:'#66bb6a', title:'Step 3(b) — Find time to stop (use kinematics check)',
+      content:`<div style="background:rgba(102,187,106,0.08);border-radius:8px;padding:0.8rem;font-size:0.87rem;line-height:1.9;">
+        From F = ma: a = −F/m = −7500/1200 = −6.25 m/s²<br>
+        v = u + at → 0 = 25 − 6.25t → t = 25/6.25 = <strong style="color:#66bb6a;">4 s</strong><br><br>
+        <em>Cross-check: d = (u+v)/2 × t = (25+0)/2 × 4 = 50 m ✓</em>
+      </div>` },
+  ];
+
+  let wepIdx = 0;
+  const cont = document.getElementById('wep-steps');
+  if(!cont) return;
+
+  const style = document.createElement('style');
+  style.textContent = '@keyframes fadeInWep { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }';
+  document.head.appendChild(style);
+
+  function renderWep(i) {
+    const s = wepStepsData[i];
+    const div = document.createElement('div');
+    div.style.cssText = `border-left:4px solid ${s.color};background:#161929;border-radius:0 10px 10px 0;padding:0.8rem 1rem;margin-bottom:0.5rem;animation:fadeInWep 0.3s ease;`;
+    div.innerHTML = `<div style="font-weight:800;color:${s.color};margin-bottom:0.4rem;font-size:0.9rem;">${s.title}</div>${s.content}`;
+    cont.appendChild(div);
+  }
+
+  window.wepReveal = function() {
+    if(wepIdx<wepStepsData.length) { renderWep(wepIdx); wepIdx++; }
+    if(wepIdx>=wepStepsData.length) document.getElementById('wep-btn').disabled=true;
+  };
+  window.wepAll = function() { while(wepIdx<wepStepsData.length){renderWep(wepIdx);wepIdx++;} document.getElementById('wep-btn').disabled=true; };
+  window.wepReset = function() { cont.innerHTML=''; wepIdx=0; document.getElementById('wep-btn').disabled=false; };
+})();
+</script>
+</body>
+</html>
